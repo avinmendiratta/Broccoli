@@ -1,0 +1,126 @@
+Here are our all binary operators, from highest to lowest precedence1:
+    - Multiplication & division (*, /, %)
+    - Addition & subtraction (+,-)
+    - Shift left (<<) & right (>>)
+    - Relational lt/gt/lte/gte (<, >,<=,>=)
+    - Relational equal/not equal (==, !=)
+    - Bitwise AND (&)
+    - Bitwise XOR (^)
+    - Bitwise OR (|)
+    - Logical AND (&&)
+    - Logical OR (||)
+
+
+ - importantly, where and when ought a unary op be applied
+ - on only an int, an applied unary op, an exp in "()"
+ - so then the def. of an exp becomes a binary op applied exp or a unary op applicable exp i.e., <factor>
+ - we don't let a unary operator compete with a binary op
+ - so we simply take a unary operator and attach it to the very next unary applicable expression
+ - if we are to apply a unary operator to a binary exp, it must already be bracketed, evaluated as an indie exp i.e., <int> or, be a unary applied expression
+ - which is basically where unary op are already applicable
+
+ - we can make a similar change to force "*" and "/" to be higher precedence than "+" and "-"
+ - so now a "*" or "/" applicable expression can be something which already has a unary operator attached to it, if there is one to be attached
+ - thus, a <term> can be a unary applicable expression or, a "*" or "/" applied expression
+
+ - now "+" and "-" can be applied to an already "*" or "/" applied expression, or a "+" and "-" applicable expression
+ - and that is the lowest precedence we can go so a "+" and "-" applicable expression is simply the <exp>
+
+ - now we need to handle associativity which is to say we need to make stuff left associative
+ - so that we can compute the expressions by looking ahead finitely many steps
+ - just 1 step ahead in our case(best case) which is the LL(1) grammar
+ - for left ass. we take an evaluated expression and look that we a "+" or "-"
+ - so now we take the smallest "+" and "-" applicable expression i.e., <term>
+ - and bundle it with that sign and shove it the LHS expression
+
+ - but that wud make the grammar left recursive since when we try to parse an <exp>,
+ - the LHS exp is an <exp> type which is again parsed and so on..., can't be handled by recursive descent
+ - we just flip the <exp> and <term> positions so now we get right recursive grammar
+ - similar sorcery for higher precedence applicable expression types
+
+ - but alas this becomes right associative again!
+ - understand that in any case we must begin a "+" and "-" applicable expression with the smallest of the kind i.e., <term>
+ - so we keep the LHS side as it is, and understand the RHS <exp> in terms of its constituent <term>s
+ - which is where we get an evaluate <exp> by adding two <term>s which in now ready to get another <term> to be added to it
+ - similar sorcery for higher precedence applicable expression types
+
+ - and mind you it is associativity that takes care of "precedence" when same type of ops are in conflict
+
+
+
+ - Oooh, we have CONDITIONALS now, OMG!
+ - e1 ? e2 : e3
+ - this op has the least precedence of all then we have somewhat of such order
+ - exp, assignment, conditional, logicals...
+
+ - e1 can't be an assignment exp bcs "=" has lower precedence than "?"
+ - and it can't be conditional lest we fall over a slope, so it is a logical-or-exp
+ - e2 can be any general exp since ? and : are implicit parentheses
+ - e3 can be any general exp except it can't be an assignment exp
+ - because of left associativity of ":", we get smthg like (.. ? .. :) = ..
+ - which is erroneous as ?: is not assignable
+ - so e3 is a conditional exp
+
+ - since we are defining all logicals as a conditional, we make the ?.. and following part optional
+
+
+
+
+
+
+
+
+<-----------------------------------Non-Terminal_Symbols---------------------------------->
+
+<program> ::= { <function> | <declaration> }
+
+ - a func. is now a list of statements
+
+<function> ::= "int" <id> "(" [ "int" <id> { "," "int" <id> } ] ")" ( "{" { <block-item> } "}" | ";" )
+
+<block-item> ::= <statement> | <declaration>
+
+<statement> ::= "return" <exp> ";"
+               | <exp-option> ";"
+               | "if" "(" <exp> ")" <statement> [ "else" <statement> ]
+               | "{" { <block-item> } "}"
+               | "for" "(" <exp-option> ";" <exp-option> ";" <exp-option> ")" <statement>
+               | "for" "(" <declaration> <exp-option> ";" <exp-option> ")" <statement>
+               | "while" "(" <exp> ")" <statement>
+               | "do" <statement> "while" "(" <exp> ")" ";"
+               | "break" ";"
+               | "continue" ";"
+
+
+<declaration> ::= "int" <id> [ = <exp> ] ";"
+
+
+
+ - in EBNF notation, wrapping something in curly braces "{}" means it can be repeated zero or more times
+
+<exp-optional> ::= <exp> | ""
+
+<exp> ::= <id> "=" <exp>
+         | <conditional-exp>
+         | "syscall"
+
+<conditional-exp> ::= <logical-or-exp> [ "?" <exp> ":" <conditional-exp> ]
+
+<logical-or-exp> ::= <logical-and-exp> { "||" <logical-and-exp> }
+<logical-and-exp> ::= <bitwise-or-exp> { "&&" <bitwise-or-exp> }
+
+<bitwise-or-exp> ::= <bitwise-xor-exp> { "|" <bitwise-xor-exp> }
+<bitwise-xor-exp> ::= <bitwise-and-exp> { "^" <bitwise-and-exp> }
+<bitwise-and-exp> ::= <equality-exp> { "&" <equality-exp> }
+
+<equality-exp> ::= <relational-exp> { ("!=" | "==") <relational-exp> }
+<relational-exp> ::= <shift-exp> { ("<" | ">" | "<=" | ">=") <shift-exp> }
+
+<shift-exp> ::= <additive-exp> { ("<<" | ">>") <additive-exp> }
+
+<additive-exp> ::= <term> { ("+" | "-") <term> }
+<term> ::= <factor> { ("*" | "/" | "%") <factor> }
+
+<factor> ::= <function-call> | "(" <exp> ")" | <unary_op> <factor> | <int> | <id>
+<function-call> ::= <id> "(" [ <exp> { "," <exp> } ] ")"
+<unary_op> ::= "!" | "-" | "~"

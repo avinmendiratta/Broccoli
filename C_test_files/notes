@@ -1,0 +1,8 @@
+gcc -S file.c -o file.s
+to generate ARM64 assembly code
+
+clang hello.s -o hello
+to generate executable
+
+./hello
+to run
