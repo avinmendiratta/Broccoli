@@ -1,33 +1,25 @@
 # Broccoli
-### Brave OS-aware CC On Line
+## Brave OS-aware CC On Line
 
-A minimal yet non-trivial C subset compiler written in Kotlin that targets ARM64 (AArch64) assembly for Apple Silicon macOS systems.
+A minimal C subset compiler written in Kotlin that targets ARM64 (AArch64) assembly for Apple Silicon macOS systems.
 
-Broccoli is designed as a systems-oriented compiler project that bridges the gap between compiler construction and operating systems concepts by generating real executable binaries that follow the macOS ARM64 ABI and runtime conventions.
+Broccoli is envisioned as a systems-oriented compiler project that serves as a learning bridge between compiler construction and operating systems concepts by generating real executable binaries that follow the macOS ARM64 ABI and runtime conventions.
 
 ---
 
 ## Overview
 
-Most educational compiler projects stop at parsing or intermediate representation generation. Broccoli goes further by:
+This toy compiler generates valid ARM64 assembly and follows Apple Silicon calling convention thereby emphasizing ABI correctness and highlighting fundamental low-level execution details.
 
-- Generating valid ARM64 assembly
-- Following the Apple Silicon calling convention
-- Producing Mach-O executables through the macOS toolchain
-- Demonstrating stack frame construction and recursion
-- Enabling runtime memory and process analysis
-
-The project emphasizes low-level execution details, ABI correctness, and operating-system-aware code generation.
+The implemetation was adapted from Nora Sandler's "Writing a C Compiler" which served as a fundamentals' guide to understanding compiler architecture and construction.
 
 ---
 
-## Features
-
-### Supported Language Features
+## Language Features
 
 - Primitive types:
   - `int`
-  - `char`
+  - `char*`
 
 - Variables:
   - Local variables
@@ -55,8 +47,6 @@ The project emphasizes low-level execution details, ABI correctness, and operati
 
 ## Non-Goals
 
-Broccoli intentionally does **not** aim for full C compliance.
-
 Unsupported features include:
 
 - Preprocessor macros
@@ -69,8 +59,6 @@ Unsupported features include:
 ---
 
 ## Technical Architecture
-
-### Compiler Pipeline
 
 ```text
 Source Code

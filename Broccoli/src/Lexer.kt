@@ -2,7 +2,7 @@ import java.io.File
 
 class Lexer {
 
-    // why is int and return placed before identifier: so regex doesn't mistake them as that
+    // why is int and return placed before identifier: so regex doesn't mistake them as an identifier
     // similarly ordering matters for the other keywords and operators: e.g. == should be before =, <= before <, etc.
     private val regex = Regex(
         """

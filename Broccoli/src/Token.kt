@@ -2,7 +2,8 @@
 // the sealed class is an abstract class with a protected constructor so:-
 // 1. one can't create instances of it directly
 // 2. thus its instances must be created by its subclasses
-// 3. and since subclasses beyond the same pkg cannot access the protected constructor of token, exhaustive 'when' statements can be used
+// 3. and since subclasses beyond the same pkg cannot access the protected constructor of token,
+//      exhaustive 'when' statements can be used
 
 
 sealed class Token {

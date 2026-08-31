@@ -192,105 +192,105 @@ private fun StringBuilder.appendNode(node: AST, indent: Int) {
 
 sealed class AST
 
-data class Program(val items: List<TopItem>) : AST()
+    data class Program(val items: List<TopItem>) : AST()
 
-sealed class TopItem : AST()
-data class FunDecl(val function: Function) : TopItem()
-data class GloblVar(val variable: VarDeclaration) : TopItem()
+    sealed class TopItem : AST()
+        data class FunDecl(val function: Function) : TopItem()
+        data class GloblVar(val variable: VarDeclaration) : TopItem()
 
-data class Function(
-    val name: String,
-    val parameters: List<String>?,
-    val body: List<BlockItem>? = emptyList()
-) : AST()
-
-
-
-sealed class BlockItem : AST()
-
-data class VarDeclaration(
-    val name: String,
-    val initializer: Expression?
-) : BlockItem()
-
-sealed class Statement : BlockItem()
-
-data class Return(val expr: Expression) : Statement()
-
-data class ExpStatement(val expr: Expression?) : Statement()
-
-data class IfStatement(
-    val condition: Expression,
-    val thenBranch: Statement,
-    val elseBranch: Statement?
-) : Statement()
-
-// A compound statement(block) is just a list of statements and declarations
-data class Compound(val body: List<BlockItem>) : Statement()
-
-data class ForStatement(
-    val initializer: Expression?,
-    val condition: Expression,
-    val cycle: Expression?,
-    val body: Statement
-) : Statement()
-
-data class ForDeclStatement(
-    val initializer: VarDeclaration,
-    val condition: Expression,
-    val cycle: Expression?,
-    val body: Statement
-) : Statement()
-
-data class WhileStatement(
-    val condition: Expression,
-    val body: Statement
-) : Statement()
-
-data class DoWhileStatement(
-    val body: Statement,
-    val condition: Expression
-) : Statement()
-
-data object Break : Statement()
-data object Continue : Statement()
+    data class Function(
+        val name: String,
+        val parameters: List<String>?,
+        val body: List<BlockItem>? = emptyList()
+    ) : AST()
 
 
 
-sealed class Expression : AST()
+    sealed class BlockItem : AST()
 
-data object Syscall : Expression()
+        data class VarDeclaration(
+            val name: String,
+            val initializer: Expression?
+        ) : BlockItem()
 
-data class FunctionCall(
-    val name: String,
-    val arguments: List<Expression> = emptyList()
-) : Expression()
+        sealed class Statement : BlockItem()
 
-data class IntegerLiteral(val value: Int) : Expression()
+            data class Return(val expr: Expression) : Statement()
 
-data class Variable(val name: String) : Expression()         // to reference a variable, basically to get its value as an expression
+            data class ExpStatement(val expr: Expression?) : Statement()
 
-data class Assignment(                                       //string is variable, exp is value to assign
-    val name: String,
-    val expr: Expression
-) : Expression()
+            data class IfStatement(
+                val condition: Expression,
+                val thenBranch: Statement,
+                val elseBranch: Statement?
+            ) : Statement()
 
-data class Unary(
-    val operator: UnanOp,
-    val expr: Expression
-) : Expression()
+            // A compound statement(block) is just a list of statements and declarations
+            data class Compound(val body: List<BlockItem>) : Statement()
 
-data class Binary(
-    val operator: BiOp,
-    val left: Expression,
-    val right: Expression
-) : Expression()
+            data class ForStatement(
+                val initializer: Expression?,
+                val condition: Expression,
+                val cycle: Expression?,
+                val body: Statement
+            ) : Statement()
 
-data class Conditional(
-    val condition: Expression,
-    val thenBranch: Expression,
-    val elseBranch: Expression
-) : Expression()
+            data class ForDeclStatement(
+                val initializer: VarDeclaration,
+                val condition: Expression,
+                val cycle: Expression?,
+                val body: Statement
+            ) : Statement()
+
+            data class WhileStatement(
+                val condition: Expression,
+                val body: Statement
+            ) : Statement()
+
+            data class DoWhileStatement(
+                val body: Statement,
+                val condition: Expression
+            ) : Statement()
+
+            data object Break : Statement()
+            data object Continue : Statement()
+
+
+
+    sealed class Expression : AST()
+
+        data object Syscall : Expression()
+
+        data class FunctionCall(
+            val name: String,
+            val arguments: List<Expression> = emptyList()
+        ) : Expression()
+
+        data class IntegerLiteral(val value: Int) : Expression()
+
+        data class Variable(val name: String) : Expression()         // to reference a variable, basically to get its value as an expression
+
+        data class Assignment(                                       //string is variable, exp is value to assign
+            val name: String,
+            val expr: Expression
+        ) : Expression()
+
+        data class Unary(
+            val operator: UnanOp,
+            val expr: Expression
+        ) : Expression()
+
+        data class Binary(
+            val operator: BiOp,
+            val left: Expression,
+            val right: Expression
+        ) : Expression()
+
+        data class Conditional(
+            val condition: Expression,
+            val thenBranch: Expression,
+            val elseBranch: Expression
+        ) : Expression()
 
 
 

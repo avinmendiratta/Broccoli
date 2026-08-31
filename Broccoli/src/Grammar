@@ -98,7 +98,7 @@ Here are our all binary operators, from highest to lowest precedence1:
 
  - in EBNF notation, wrapping something in curly braces "{}" means it can be repeated zero or more times
 
-<exp-optional> ::= <exp> | ""
+<exp-option> ::= <exp> | ""
 
 <exp> ::= <id> "=" <exp>
          | <conditional-exp>
