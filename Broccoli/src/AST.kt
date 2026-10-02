@@ -3,10 +3,8 @@
 // println(program.prettyPrint())
 // to print the AST for debugging
 
-fun AST.prettyPrint(): String {
-    return buildString {
+fun AST.prettyPrint(): String = buildString {
         appendNode(this@prettyPrint, 0)
-    }
 }
 
 private fun StringBuilder.line(indent: Int, text: String) {
